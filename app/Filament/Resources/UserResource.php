@@ -12,18 +12,34 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-group';
+    protected static ?string $navigationLabel = 'Admin DPM ';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+            TextInput::make('name')
+                ->required()
+                ->label('Nama'),
+
+            TextInput::make('email')
+                ->email()
+                ->required(),
+
+            TextInput::make('password')
+                ->password()
+                ->required()
+                ->dehydrateStateUsing(fn ($state) => \Hash::make($state))
+                ->dehydrated(fn ($state) => filled($state))
+                ->label('Password'), 
             ]);
     }
 
@@ -31,7 +47,20 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+            TextColumn::make('name')
+                ->label('Nama')
+                ->searchable()
+                ->sortable(),
+
+            TextColumn::make('email')
+                ->label('Email')
+                ->searchable()
+                ->sortable(),
+
+            TextColumn::make('created_at')
+                ->label('Dibuat')
+                ->dateTime()
+                ->sortable(),    //
             ])
             ->filters([
                 //

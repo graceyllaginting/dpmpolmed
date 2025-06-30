@@ -17,33 +17,40 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-tag';
+    protected static ?string $navigationLabel = 'Kategori ';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('nama_kategori')
+                ->label('Nama Kategori')
+                ->required()
+                ->maxLength(255),
             ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('nama_kategori')
+                ->label('Nama Kategori')
+                ->searchable()
+                ->sortable(),
+        ])
+        ->defaultSort('id_kategori', 'asc') // ⬅️ Tambahkan baris ini
+        ->filters([
+            //
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\DeleteBulkAction::make(),
+        ]);
     }
 
     public static function getRelations(): array

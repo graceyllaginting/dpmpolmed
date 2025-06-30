@@ -2,15 +2,22 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\VisitorStats;
+use App\Filament\Widgets\LatestAspirations;
+
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Pages\Dashboard;
+use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
+
+use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
-use Filament\Panel;
-use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
-use Filament\Widgets;
+
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -28,17 +35,24 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#9400d3',
+                'secondary' => '#FFD700',
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            
+            ->brandName('DPM POLMED')
+            ->brandLogo(fn () => view('components.logo'))
+            ->discoverResources(app_path('Filament/Resources'), 'App\\Filament\\Resources')
+            ->discoverPages(app_path('Filament/Pages'), 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(app_path('Filament/Widgets'), 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                StatsOverview::class,
+                VisitorStats::class,
+                LatestAspirations::class,
+                AccountWidget::class,
+                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

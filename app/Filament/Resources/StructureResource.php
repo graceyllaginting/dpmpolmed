@@ -3,27 +3,47 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StructureResource\Pages;
-use App\Filament\Resources\StructureResource\RelationManagers;
 use App\Models\Structure;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 
 class StructureResource extends Resource
 {
     protected static ?string $model = Structure::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-users';
+    protected static ?string $navigationLabel = 'Struktur Organisasi DPM';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nama_anggota')
+                    ->required()
+                    ->label('Nama Anggota')
+                    ->maxLength(255),
+
+                TextInput::make('jabatan')
+                    ->required()
+                    ->label('Jabatan')
+                    ->maxLength(255),
+
+                FileUpload::make('foto')
+                    ->image()
+                    ->label('Foto')
+                    ->directory('struktur-foto'),
+
+                TextInput::make('periode')
+                    ->required()
+                    ->label('Periode')
+                    ->maxLength(50),
             ]);
     }
 
@@ -31,26 +51,24 @@ class StructureResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('nama_anggota')->label('Nama')->searchable(),
+                TextColumn::make('jabatan')->label('Jabatan')->searchable(),
+                ImageColumn::make('foto')->label('Foto')->circular(),
+                TextColumn::make('periode')->label('Periode'),
+                TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y - H:i'),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
