@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Columns\TextColumn;
 
 class AspirationResource extends Resource
@@ -61,13 +62,40 @@ class AspirationResource extends Resource
                     ])
                     ->default('pending'),
 
+                // Kolom tambahan: tanggal, waktu, tempat
+                DatePicker::make('tanggal_pertemuan')
+                    ->label('Tanggal Pertemuan')
+                    ->reactive()
+                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($state, $get('waktu_pertemuan'), $get('tempat_pertemuan')))),
+
+                TimePicker::make('waktu_pertemuan')
+                    ->label('Waktu Pertemuan')
+                    ->reactive()
+                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($get('tanggal_pertemuan'), $state, $get('tempat_pertemuan')))),
+
+                TextInput::make('tempat_pertemuan')
+                    ->label('Tempat Pertemuan')
+                    ->reactive()
+                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($get('tanggal_pertemuan'), $get('waktu_pertemuan'), $state))),
+
                 Textarea::make('tanggapan')
                     ->label('Tanggapan Admin')
-                    ->rows(5),
+                    ->rows(6)
+                    ->disabled()
+                    ->required(),
 
                 DatePicker::make('tanggal_kirim')
                     ->label('Tanggal Kirim'),
             ]);
+    }
+
+    public static function generateTemplate($tanggal, $waktu, $tempat): string
+    {
+        return "Dengan hormat, kami mengundang Saudara untuk hadir pada pertemuan yang akan dilaksanakan pada:\n\n" .
+            "📅 Tanggal: " . ($tanggal ?? '-') . "\n" .
+            "🕒 Waktu: " . ($waktu ?? '-') . "\n" .
+            "📍 Tempat: " . ($tempat ?? '-') . "\n\n" .
+            "Atas perhatian Saudara, kami ucapkan terima kasih.";
     }
 
     public static function table(Table $table): Table
@@ -83,7 +111,8 @@ class AspirationResource extends Resource
                     ->formatStateUsing(fn ($state) => match ($state) {
                         'pending' => 'Belum Ditanggapi',
                         'ditanggapi' => 'Sudah Ditanggapi',
-                        'selesai' => 'Selesai',})
+                        'selesai' => 'Selesai',
+                    })
                     ->color(fn ($state) => match ($state) {
                         'pending' => 'gray',
                         'ditanggapi' => 'yellow',
@@ -91,9 +120,6 @@ class AspirationResource extends Resource
                         default => 'gray',
                     }),
                 TextColumn::make('tanggal_kirim')->label('Tanggal Kirim')->date('d M Y'),
-            ])
-            ->filters([
-                // Tambah filter jika perlu
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -103,13 +129,6 @@ class AspirationResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            // Tambahkan RelationManager jika ada relasi lain
-        ];
     }
 
     public static function getPages(): array

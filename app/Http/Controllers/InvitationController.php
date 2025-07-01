@@ -3,63 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invitation;
+use App\Models\Aspiration;
 use Illuminate\Http\Request;
 
 class InvitationController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Menyimpan undangan baru ke database.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_aspirasi' => 'required|exists:aspirations,id',
+            'isi_undangan' => 'required|string',
+            'tanggal' => 'required|date',
+            'waktu' => 'required',
+            'tempat' => 'required|string',
+        ]);
+
+        Invitation::create($validated);
+
+        return back()->with('success', 'Undangan berhasil dibuat.');
     }
 
     /**
-     * Display the specified resource.
+     * Menampilkan undangan berdasarkan kode aspirasi.
      */
-    public function show(Invitation $invitation)
+    public function showByKode($kode)
     {
-        //
+        $aspirasi = Aspiration::where('kode_aspirasi', $kode)->with('invitation')->firstOrFail();
+
+        return view('invitations.show', compact('aspirasi'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Mahasiswa mengonfirmasi undangan (diterima/ditolak).
      */
-    public function edit(Invitation $invitation)
+    public function konfirmasi(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'status_konfirmasi' => 'required|in:diterima,ditolak',
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Invitation $invitation)
-    {
-        //
-    }
+        $undangan = Invitation::findOrFail($id);
+        $undangan->update([
+            'status_konfirmasi' => $request->status_konfirmasi,
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Invitation $invitation)
-    {
-        //
+        return back()->with('success', 'Status konfirmasi berhasil diperbarui.');
     }
 }

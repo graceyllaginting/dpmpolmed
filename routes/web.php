@@ -30,5 +30,10 @@ Route::post('/aspirasi', [AspirationController::class, 'store'])->name('aspirasi
 Route::get('/aspirasi/{kode}', [AspirationController::class, 'show'])->name('aspirasi.show');
 Route::get('/aspirasi', [AspirationController::class, 'index'])->name('aspirasi.index');
 Route::get('/aspirations/cek', [AspirationController::class, 'cek'])->name('aspirasi.cek');
+Route::get('/aspirasi/download/{kode}', [AspirationController::class, 'download'])->name('aspirasi.download');
 
 Route::resource('users', UserController::class);
+
+Route::post('/invitations/store', [InvitationController::class, 'store'])->name('invitations.store');
+Route::get('/invitations/{kode}', [InvitationController::class, 'showByKode'])->name('invitations.show');
+Route::post('/invitations/{id}/konfirmasi', [InvitationController::class, 'konfirmasi'])->name('invitations.konfirmasi');

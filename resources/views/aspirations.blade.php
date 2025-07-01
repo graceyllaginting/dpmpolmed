@@ -78,12 +78,15 @@
             </svg>
             <div>
                 <p class="font-semibold">Aspirasi berhasil dikirim!</p>
-                <p class="text-sm">Simpan kode berikut: <span class="font-bold">{{ session('kode_aspirasi') }}</span></p>
+                <p class="text-sm">Kode: <strong>{{ session('kode_aspirasi') }}</strong></p>
+                <a href="{{ route('aspirasi.download', session('kode_aspirasi')) }}"
+                class="text-blue-600 underline hover:text-blue-800 text-sm" target="_blank">
+                📄 Unduh Kode Aspirasi (PDF)
+                </a>
             </div>
         </div>
-
-         @endif
-<br><br>
+        @endif
+<br>
          
     {{-- Cek Tanggapan --}}
     <div class="bg-white shadow-md rounded-lg p-6 mb-6 border">

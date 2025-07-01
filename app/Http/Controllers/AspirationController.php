@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Aspiration;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class AspirationController extends Controller
 {
     // 📨 Tampilkan halaman form + list + hasil pencarian
     public function index()
-    {
+{
         $aspirasiPublik = Aspiration::whereNotNull('tanggapan')
             ->where('status', '!=', 'pending')
             ->latest('tanggal_kirim')
@@ -48,7 +51,20 @@ class AspirationController extends Controller
             'tanggal_kirim' => Carbon::now()->toDateString(),
         ]);
 
-        return redirect()->back()->with('kode_aspirasi', $kode);
+
+        // 🖨️ Generate PDF
+        $pdf = Pdf::loadView('pdf.kode-aspirasi', compact('kode'));
+        $path = 'aspirasi/kode_' . $kode . '.pdf';
+
+        if (!Storage::exists('aspirasi')) {
+            Storage::makeDirectory('aspirasi');
+        }
+
+        Storage::put($path, $pdf->output());
+
+        // 📨 Redirect dengan session
+        return redirect()->route('aspirasi.index')->with('kode_aspirasi', $kode);
+
     }
 
     // 🔍 Cek tanggapan berdasarkan kode
@@ -74,8 +90,16 @@ class AspirationController extends Controller
         return view('aspirations-detail', compact('aspirasi'));
     }
 
+    public function download($kode)
+    {
+        $filePath = "aspirasi/kode_$kode.pdf";
 
+        if (Storage::exists($filePath)) {
+            return Storage::download($filePath, "Kode_Aspirasi_$kode.pdf");
+        }
 
+        return redirect()->route('aspirasi.index')->with('error', 'File tidak ditemukan.');
+    }
 
 
 }
