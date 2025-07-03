@@ -84,12 +84,16 @@ class AspirationController extends Controller
         return redirect()->route('aspirasi.show', ['kode' => $aspirasi->kode_aspirasi]);
     }
 
-   public function show($kode)
+// ✨ Sudah sesuai
+    public function show($kode)
     {
+        // ⬅️ Pastikan eager load 'invitation' agar bisa langsung dipakai di blade
         $aspirasi = Aspiration::with('invitation')->where('kode_aspirasi', $kode)->firstOrFail();
+
+        // ⬅️ Sesuaikan nama file blade jika kamu pakai `aspirations-detail.blade.php`
         return view('aspirations-detail', compact('aspirasi'));
     }
-
+    
     public function download($kode)
     {
         $filePath = "aspirasi/kode_$kode.pdf";

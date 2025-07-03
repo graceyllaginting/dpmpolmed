@@ -17,7 +17,7 @@
                 <span class="absolute left-0 -bottom-1 w-0 h-0.5 bg-orange-500 transition-all group-hover:w-full"></span>
             </a>
             <a href="{{ route('struktur') }}" class="relative group">
-                <span class="hover:text-orange-500">Profil</span>
+                <span class="hover:text-orange-500">Profil Organisasi</span>
                 <span class="absolute left-0 -bottom-1 w-0 h-0.5 bg-orange-500 transition-all group-hover:w-full"></span>
             </a>
             <a href="{{ route('documentation.index') }}" class="relative group">
@@ -51,10 +51,10 @@
     <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 bg-white">
         <ul class="flex flex-col space-y-2 text-gray-700 font-medium">
             <a href="{{ url('/') }}" class="hover:text-orange-500">Beranda</a></li>
-            <li><a href="{{ route('struktur') }}" class="hover:text-orange-500">Profil</a></li>
+            <li><a href="{{ route('struktur') }}" class="hover:text-orange-500">Profil Organisasi</a></li>
             <li><a href="{{ route('documentation.index') }}" class="hover:text-orange-500">Dokumentasi</a></li>
             <li><a href="{{ route('aspirasi.index') }}" class="hover:text-orange-500">Aspirasi</a></li>
-            <li><a href="{{ url('/portal') }}" class="bg-gray-900 text-white px-4 py-2 rounded-md w-fit mt-2 hover:bg-gray-700">Portal</a></li>
+            <li><a href="{{route('aspirasi.index') }}" class="bg-red-800 text-white px-4 py-2 rounded-md w-fit mt-2 hover:bg-orange-650">Kirim Aspirasimu</a></li>
         </ul>
     </div>
 </nav>

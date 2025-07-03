@@ -27,7 +27,7 @@ class EditAspiration extends EditRecord
             Forms\Components\Textarea::make('tanggapan')
                 ->label('Tanggapan Langsung')
                 ->nullable()
-                ->default(null),
+                ->columnSpan('full'),
 
             Forms\Components\Select::make('status')
                 ->label('Status Tanggapan')
@@ -39,58 +39,27 @@ class EditAspiration extends EditRecord
                 ->required(),
 
             Forms\Components\Toggle::make('butuh_undangan')
-                ->label('Apakah butuh pertemuan/undangan?')
-                ->reactive()
-                ->default(false),
+                ->label('Butuh Undangan Pertemuan?')
+                ->reactive(),
 
             Forms\Components\DatePicker::make('tanggal')
                 ->label('Tanggal Pertemuan')
-                ->visible(fn ($get) => $get('butuh_undangan'))
-                ->nullable()
-                ->reactive()
-                ->afterStateUpdated(fn ($set, $get) => $this->generateIsiUndangan($set, $get)),
+                ->visible(fn ($get) => $get('butuh_undangan')),
 
             Forms\Components\TimePicker::make('waktu')
                 ->label('Waktu Pertemuan')
-                ->visible(fn ($get) => $get('butuh_undangan'))
-                ->nullable()
-                ->reactive()
-                ->afterStateUpdated(fn ($set, $get) => $this->generateIsiUndangan($set, $get)),
+                ->visible(fn ($get) => $get('butuh_undangan')),
 
             Forms\Components\TextInput::make('tempat')
                 ->label('Tempat Pertemuan')
-                ->visible(fn ($get) => $get('butuh_undangan'))
-                ->nullable()
-                ->reactive()
-                ->afterStateUpdated(fn ($set, $get) => $this->generateIsiUndangan($set, $get)),
-
-            Forms\Components\Textarea::make('isi_undangan')
-                ->label('Isi Undangan')
-                ->visible(fn ($get) => $get('butuh_undangan'))
-                ->disabled()
-                ->dehydrated(false),
+                ->visible(fn ($get) => $get('butuh_undangan')),
         ]);
-    }
-
-    protected function generateIsiUndangan($set, $get): void
-    {
-        $tanggal = $get('tanggal') ? Carbon::parse($get('tanggal'))->translatedFormat('d F Y') : '...';
-        $waktu   = $get('waktu') ?? '...';
-        $tempat  = $get('tempat') ?? '...';
-
-        $template = "DPM mengundang Anda untuk menghadiri pertemuan pada:\n\n"
-                  . "📅 Tanggal: {$tanggal}\n"
-                  . "🕒 Waktu: {$waktu}\n"
-                  . "📍 Tempat: {$tempat}\n\n"
-                  . "Harap hadir tepat waktu. Terima kasih.";
-
-        $set('isi_undangan', $template);
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        // Field undangan tidak disimpan ke table aspirations
-        unset($data['butuh_undangan'], $data['isi_undangan'], $data['tanggal'], $data['waktu'], $data['tempat']);
+        // Buang data undangan dari table aspirations
+        unset($data['butuh_undangan'], $data['tanggal'], $data['waktu'], $data['tempat']);
         return $data;
     }
 
@@ -98,24 +67,30 @@ class EditAspiration extends EditRecord
     {
         $data = $this->form->getState();
 
-        // Hapus undangan lama jika ada
-        Invitation::where('id_aspirasi', $this->record->id)->delete();
+        // Pastikan hanya jika toggle aktif dan data lengkap
+        if ($data['butuh_undangan'] && $data['tanggal'] && $data['waktu'] && $data['tempat']) {
 
-        // Jika form aktifkan undangan
-        if (
-            $data['butuh_undangan'] &&
-            $data['tanggal'] &&
-            $data['waktu'] &&
-            $data['tempat']
-        ) {
-            Invitation::updateOrCreate([
-                'id_aspirasi' => $this->record->id,
-                'isi_undangan' => $data['isi_undangan'],
-                'tanggal' => Carbon::parse($data['tanggal']),
+            // Cek apakah undangan untuk aspirasi ini sudah ada
+            $existingInvitation = Invitation::where('id_aspirasi', $this->record->id)->first();
+
+            $payload = [
+                'tanggal' => $data['tanggal'],
                 'waktu' => $data['waktu'],
                 'tempat' => $data['tempat'],
-                'status_konfirmasi' => 'pending',
-            ]);
+                'status_konfirmasi' => 'pending', // bisa diubah jika ada workflow konfirmasi
+            ];
+
+            if ($existingInvitation) {
+                $existingInvitation->update($payload);
+            } else {
+                // Tambahkan ID aspirasi
+                $payload['id_aspirasi'] = $this->record->id;
+                Invitation::create($payload);
+            }
+        } else {
+            // Jika toggle dimatikan → hapus undangan (opsional)
+            Invitation::where('id_aspirasi', $this->record->id)->delete();
         }
     }
+
 }

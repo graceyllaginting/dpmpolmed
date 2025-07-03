@@ -36,12 +36,10 @@ class StructureResource extends Resource
                     ->maxLength(255),
 
                 TextInput::make('bagian')
-                    ->required()
                     ->label('Bagian')
                     ->maxLength(255),
 
                 TextInput::make('prodi')
-                    ->required()
                     ->label('Program Studi')
                     ->maxLength(255),
 
@@ -53,7 +51,7 @@ class StructureResource extends Resource
                 FileUpload::make('foto')
                     ->image()
                     ->imagePreviewHeight('250')
-                    ->maxSize(10240)
+                    ->maxSize(10240) // 10 MB
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
                     ->label('Foto')
                     ->directory('struktur-foto')
@@ -61,14 +59,15 @@ class StructureResource extends Resource
             ]);
     }
 
-
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                ImageColumn::make('foto')->label('Foto')->circular(),
                 TextColumn::make('nama_anggota')->label('Nama')->searchable(),
                 TextColumn::make('jabatan')->label('Jabatan')->searchable(),
-                ImageColumn::make('foto')->label('Foto')->circular(),
+                TextColumn::make('bagian')->label('Bagian'),
+                TextColumn::make('prodi')->label('Prodi'),
                 TextColumn::make('periode')->label('Periode'),
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y - H:i'),
             ])

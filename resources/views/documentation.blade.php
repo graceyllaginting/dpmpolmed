@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 <div class="container mx-auto px-4 py-6">
     <h1 class="text-3xl font-bold text-center mb-8">Dokumentasi Kegiatan</h1>
 
@@ -21,11 +25,21 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             @foreach($latestDocs as $dok)
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-[1.02] transition duration-300">
-                    @if($dok->file)
-                        <img src="{{ asset('storage/' . $dok->file) }}" alt="{{ $dok->judul }}" class="w-full h-48 object-cover">
+                    @if ($dok->file)
+                        @if (Str::endsWith($dok->file, ['jpg', 'jpeg', 'png', 'webp']))
+                            <img src="{{ asset('storage/' . $dok->file) }}" alt="{{ $dok->judul }}" class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                                <div class="text-center text-sm">
+                                    📄 {{ basename($dok->file) }} <br>
+
+                                </div>
+                            </div>
+                        @endif
                     @else
-                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">Tidak Ada Gambar</div>
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">Tidak Ada File</div>
                     @endif
+
                     <div class="p-4 space-y-2">
                         <h3 class="text-lg font-semibold text-gray-800">{{ $dok->judul }}</h3>
                         <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($dok->tanggal)->translatedFormat('d F Y') }}</p>
@@ -47,7 +61,19 @@
             @forelse ($selectedCategory->documentation as $doc)
                 <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition duration-300">
                     @if ($doc->file)
-                        <img src="{{ asset('storage/' . $doc->file) }}" class="w-full h-48 object-cover" alt="{{ $doc->judul }}">
+                        @if (Str::endsWith($doc->file, ['jpg', 'jpeg', 'png', 'webp']))
+                            <img src="{{ asset('storage/' . $doc->file) }}" class="w-full h-48 object-cover" alt="{{ $doc->judul }}">
+                        @else
+                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                                <div class="text-center text-sm">
+                                    📄 {{ basename($doc->file) }} <br>
+     
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">Tidak Ada File</div>
                     @endif
                     <div class="p-4">
                         <h3 class="font-semibold">{{ $doc->judul }}</h3>

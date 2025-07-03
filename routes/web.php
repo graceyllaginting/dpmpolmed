@@ -7,12 +7,13 @@ use App\Http\Controllers\DocumentationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
+use Filament\Facades\Filament;
+use App\Http\Controllers\HomeController;
 
 
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 Route::get('/about', function () {
     return view('about');
@@ -37,3 +38,19 @@ Route::resource('users', UserController::class);
 Route::post('/invitations/store', [InvitationController::class, 'store'])->name('invitations.store');
 Route::get('/invitations/{kode}', [InvitationController::class, 'showByKode'])->name('invitations.show');
 Route::post('/invitations/{id}/konfirmasi', [InvitationController::class, 'konfirmasi'])->name('invitations.konfirmasi');
+
+// Route::get('/struktur', [StructureController::class, 'index'])->name('struktur');
+Route::get('/struktur/bagian/{bagian}', [StructureController::class, 'showByBagian'])->name('struktur.bagian');
+
+Route::get('/struktur', [StructureController::class, 'index'])->name('struktur.index');
+
+Route::get('/struktur/periode', [StructureController::class, 'filterPeriode'])->name('struktur.periode');
+
+
+Route::get('/debug-invitation-route', function () {
+    return route('filament.admin.resources.invitations.index');
+});
+
+
+
+
