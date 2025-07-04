@@ -1,96 +1,26 @@
 <?php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-namespace App\Filament\Resources;
-
-use App\Filament\Resources\StructureResource\Pages;
-use App\Models\Structure;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-
-class StructureResource extends Resource
-{
-    protected static ?string $model = Structure::class;
-
-    protected static ?string $navigationIcon = 'heroicon-s-users';
-    protected static ?string $navigationLabel = 'Struktur Organisasi DPM';
-
-    public static function form(Form $form): Form
+return new class extends Migration {
+    public function up(): void
     {
-        return $form
-            ->schema([
-                TextInput::make('nama_anggota')
-                    ->required()
-                    ->label('Nama Anggota')
-                    ->maxLength(255),
-
-                TextInput::make('jabatan')
-                    ->required()
-                    ->label('Jabatan')
-                    ->maxLength(255),
-
-                TextInput::make('bagian')
-                    ->label('Bagian')
-                    ->maxLength(255),
-
-                TextInput::make('prodi')
-                    ->label('Program Studi')
-                    ->maxLength(255),
-
-                TextInput::make('periode')
-                    ->required()
-                    ->label('Periode')
-                    ->maxLength(50),
-
-                FileUpload::make('foto')
-                    ->image()
-                    ->imagePreviewHeight('250')
-                    ->maxSize(10240) // 10 MB
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
-                    ->label('Foto')
-                    ->directory('struktur-foto')
-                    ->required(),
-            ]);
+        Schema::create('structures', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_anggota');
+            $table->string('jabatan');
+            $table->string('bagian')->nullable();       // <- boleh kosong
+            $table->string('prodi')->nullable();        // <- boleh kosong
+            $table->string('periode');
+            $table->string('foto');                     // <- menyimpan nama file atau path
+            $table->timestamps();
+        });
     }
 
-    public static function table(Table $table): Table
+    public function down(): void
     {
-        return $table
-            ->columns([
-                ImageColumn::make('foto')->label('Foto')->circular(),
-                TextColumn::make('nama_anggota')->label('Nama')->searchable(),
-                TextColumn::make('jabatan')->label('Jabatan')->searchable(),
-                TextColumn::make('bagian')->label('Bagian'),
-                TextColumn::make('prodi')->label('Prodi'),
-                TextColumn::make('periode')->label('Periode'),
-                TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y - H:i'),
-            ])
-            ->filters([])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+        Schema::dropIfExists('structures');
     }
+};
 
-    public static function getRelations(): array
-    {
-        return [];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListStructures::route('/'),
-            'create' => Pages\CreateStructure::route('/create'),
-            'edit' => Pages\EditStructure::route('/{record}/edit'),
-        ];
-    }
-}
