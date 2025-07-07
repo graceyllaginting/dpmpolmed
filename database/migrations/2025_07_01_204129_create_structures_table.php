@@ -7,7 +7,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('structures', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_struktur');
             $table->string('nama_anggota');
             $table->string('jabatan');
             $table->string('bagian')->nullable();       // <- boleh kosong

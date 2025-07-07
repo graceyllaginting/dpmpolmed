@@ -62,41 +62,25 @@ class AspirationResource extends Resource
                     ])
                     ->default('pending'),
 
-                // Kolom tambahan: tanggal, waktu, tempat
-                DatePicker::make('tanggal_pertemuan')
-                    ->label('Tanggal Pertemuan')
-                    ->reactive()
-                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($state, $get('waktu_pertemuan'), $get('tempat_pertemuan')))),
-
-                TimePicker::make('waktu_pertemuan')
-                    ->label('Waktu Pertemuan')
-                    ->reactive()
-                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($get('tanggal_pertemuan'), $state, $get('tempat_pertemuan')))),
-
-                TextInput::make('tempat_pertemuan')
-                    ->label('Tempat Pertemuan')
-                    ->reactive()
-                    ->afterStateUpdated(fn($state, $set, $get) => $set('tanggapan', self::generateTemplate($get('tanggal_pertemuan'), $get('waktu_pertemuan'), $state))),
-
                 Textarea::make('tanggapan')
                     ->label('Tanggapan Admin')
                     ->rows(6)
                     ->disabled()
                     ->required(),
 
+                Textarea::make('balasan_mahasiswa')
+                    ->label('Balasan Mahasiswa')
+                    ->rows(5)
+                    ->disabled()
+                    ->visible(fn ($record) => filled($record->balasan_mahasiswa))
+                    ->columnSpanFull(),
+
                 DatePicker::make('tanggal_kirim')
                     ->label('Tanggal Kirim'),
             ]);
     }
 
-    public static function generateTemplate($tanggal, $waktu, $tempat): string
-    {
-        return "Dengan hormat, kami mengundang Saudara untuk hadir pada pertemuan yang akan dilaksanakan pada:\n\n" .
-            "📅 Tanggal: " . ($tanggal ?? '-') . "\n" .
-            "🕒 Waktu: " . ($waktu ?? '-') . "\n" .
-            "📍 Tempat: " . ($tempat ?? '-') . "\n\n" .
-            "Atas perhatian Saudara, kami ucapkan terima kasih.";
-    }
+
 
     public static function table(Table $table): Table
     {
@@ -119,10 +103,27 @@ class AspirationResource extends Resource
                         'selesai' => 'green',
                         default => 'gray',
                     }),
+                TextColumn::make('balasan_mahasiswa')
+                    ->label('Balasan')
+                    ->formatStateUsing(fn ($state) => $state ? '✅ Ada' : '❌ Belum')
+                    ->badge()
+                    ->limit(30)
+                    ->wrap()
+                    ->color(fn ($state) => $state ? 'green' : 'gray')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('tanggal_kirim')->label('Tanggal Kirim')->date('d M Y'),
             ])
+            ->filters([
+                Tables\Filters\TernaryFilter::make('balasan_mahasiswa')
+                    ->label('Balasan Mahasiswa')
+                    ->trueLabel('Sudah Ada')
+                    ->falseLabel('Belum Ada')
+                    ->column('balasan_mahasiswa'),
+            ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -137,6 +138,8 @@ class AspirationResource extends Resource
             'index' => Pages\ListAspirations::route('/'),
             'create' => Pages\CreateAspiration::route('/create'),
             'edit' => Pages\EditAspiration::route('/{record}/edit'),
+            'view' => Pages\ViewAspiration::route('/{record}'),
+
         ];
     }
 }

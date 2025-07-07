@@ -50,10 +50,10 @@
     {{-- Mobile Menu --}}
     <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 bg-white">
         <ul class="flex flex-col space-y-2 text-gray-700 font-medium">
-            <a href="{{ url('/') }}" class="hover:text-orange-500">Beranda</a></li>
-            <li><a href="{{ route('struktur') }}" class="hover:text-orange-500">Profil Organisasi</a></li>
-            <li><a href="{{ route('documentation.index') }}" class="hover:text-orange-500">Dokumentasi</a></li>
-            <li><a href="{{ route('aspirasi.index') }}" class="hover:text-orange-500">Aspirasi</a></li>
+            <li><a href="{{ url('/') }}" class="hover:text-yellow-600 transition">🏠 Beranda</a></li>
+            <li><a href="{{ route('struktur') }}" class="hover:text-yellow-600 transition">👥 Profil Organisasi</a></li>
+            <li><a href="{{ route('documentation.index') }}" class="hover:text-yellow-600 transition">📸 Dokumentasi</a></li>
+            <li><a href="{{ route('aspirasi.index') }}" class="hover:text-orange-600 transition">📝 Aspirasi</a></li>
             <li><a href="{{route('aspirasi.index') }}" class="bg-red-800 text-white px-4 py-2 rounded-md w-fit mt-2 hover:bg-orange-650">Kirim Aspirasimu</a></li>
         </ul>
     </div>

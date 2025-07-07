@@ -15,7 +15,7 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-    // Tampilkan form tambah user
+    // Tampilkan form tambah user8
     public function create()
     {
         return view('users.create');

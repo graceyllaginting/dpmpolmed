@@ -11,20 +11,7 @@ class InvitationController extends Controller
     /**
      * Menyimpan undangan baru ke database.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'id_aspirasi' => 'required|exists:aspirations,id',
-            'isi_undangan' => 'required|string',
-            'tanggal' => 'required|date',
-            'waktu' => 'required',
-            'tempat' => 'required|string',
-        ]);
 
-        Invitation::create($validated);
-
-        return back()->with('success', 'Undangan berhasil dibuat.');
-    }
 
     /**
      * Menampilkan undangan berdasarkan kode aspirasi.
@@ -33,7 +20,7 @@ class InvitationController extends Controller
     {
         $aspirasi = Aspiration::where('kode_aspirasi', $kode)->with('invitation')->firstOrFail();
 
-        return view('invitations.show', compact('aspirasi'));
+        return view('invitation', compact('aspirasi'));
     }
 
     /**

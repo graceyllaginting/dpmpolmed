@@ -18,6 +18,7 @@ class Aspiration extends Model
         'isi_aspirasi',
         'status',
         'tanggapan',
+        'balasan_mahasiswa',
         'tanggal_kirim',
     ];
 

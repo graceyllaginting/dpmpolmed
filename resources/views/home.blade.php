@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Beranda')
 
 @section('content')
 
 {{-- Hero Section --}}
-<section class="relative h-screen bg-cover bg-center flex items-center justify-center text-center" style="background-image: url('{{ asset('img/bgdpm.jpg') }}');">
+<section class="relative h-screen bg-cover bg-center flex items-center justify-center text-center" style="background-image: url('{{ asset('img/bgdpm2.png') }}');">
     <div class="absolute inset-0 bg-opacity-50"></div>
     <div class="relative z-10 px-4">
         <h1 class="text-white text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg animate__animated animate__fadeInDown">

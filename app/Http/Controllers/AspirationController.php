@@ -10,26 +10,33 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
 class AspirationController extends Controller
 {
     // 📨 Tampilkan halaman form + list + hasil pencarian
     public function index()
-{
+    {
         $aspirasiPublik = Aspiration::whereNotNull('tanggapan')
             ->where('status', '!=', 'pending')
             ->latest('tanggal_kirim')
             ->take(5)
             ->get();
 
-        return view('aspirations', compact('aspirasiPublik'));
+        // Statistik
+        $totalAspirasi = Aspiration::count();
+        $totalDitanggapi = Aspiration::whereNotNull('tanggapan')->count();
+        $totalBelumDitanggapi = Aspiration::whereNull('tanggapan')->count();
+
+        return view('aspirations', compact(
+            'aspirasiPublik',
+            'totalAspirasi',
+            'totalDitanggapi',
+            'totalBelumDitanggapi'
+        ));
     }
 
     // 🧾 Simpan aspirasi dari form
     public function store(Request $request)
     {
-            // dd($request->all());
-
         $validated = $request->validate([
             'nama_pengirim' => 'required|string|max:255',
             'nim' => 'required|string|max:20',
@@ -51,7 +58,6 @@ class AspirationController extends Controller
             'tanggal_kirim' => Carbon::now()->toDateString(),
         ]);
 
-
         // 🖨️ Generate PDF
         $pdf = Pdf::loadView('pdf.kode-aspirasi', compact('kode'));
         $path = 'aspirasi/kode_' . $kode . '.pdf';
@@ -62,9 +68,7 @@ class AspirationController extends Controller
 
         Storage::put($path, $pdf->output());
 
-        // 📨 Redirect dengan session
         return redirect()->route('aspirasi.index')->with('kode_aspirasi', $kode);
-
     }
 
     // 🔍 Cek tanggapan berdasarkan kode
@@ -77,23 +81,19 @@ class AspirationController extends Controller
         $aspirasi = Aspiration::where('kode_aspirasi', $request->kode)->first();
 
         if (!$aspirasi) {
-            return redirect()->back()->withErrors(['kode' => 'Kode tidak ditemukan']);
+            return redirect()->back()->with('not_found', 'Kode aspirasi tidak ditemukan. Periksa kembali kode yang kamu masukkan.');
         }
 
-        // ✅ Redirect ke route aspiras.show pakai kode, bukan ID
         return redirect()->route('aspirasi.show', ['kode' => $aspirasi->kode_aspirasi]);
     }
 
-// ✨ Sudah sesuai
     public function show($kode)
     {
-        // ⬅️ Pastikan eager load 'invitation' agar bisa langsung dipakai di blade
         $aspirasi = Aspiration::with('invitation')->where('kode_aspirasi', $kode)->firstOrFail();
 
-        // ⬅️ Sesuaikan nama file blade jika kamu pakai `aspirations-detail.blade.php`
         return view('aspirations-detail', compact('aspirasi'));
     }
-    
+
     public function download($kode)
     {
         $filePath = "aspirasi/kode_$kode.pdf";
@@ -104,6 +104,28 @@ class AspirationController extends Controller
 
         return redirect()->route('aspirasi.index')->with('error', 'File tidak ditemukan.');
     }
+
+
+    public function balas(Request $request, $kode)
+    {
+        $request->validate([
+            'balasan_mahasiswa' => 'required|string|max:1000',
+        ]);
+
+        $aspirasi = Aspiration::where('kode_aspirasi', $kode)->firstOrFail();
+
+        // Hanya boleh membalas jika sudah ada tanggapan dari DPM
+        if (!$aspirasi->tanggapan) {
+            return redirect()->back()->with('error', 'Tidak bisa membalas karena belum ada tanggapan dari DPM.');
+        }
+
+        $aspirasi->balasan_mahasiswa = $request->balasan_mahasiswa;
+        $aspirasi->save();
+
+        return redirect()->route('aspirasi.show', ['kode' => $kode])
+            ->with('success', 'Balasan Anda berhasil dikirim!');
+    }
+
 
 
 }

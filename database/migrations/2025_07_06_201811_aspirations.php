@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('isi_aspirasi');
             $table->enum('status', ['pending', 'ditanggapi', 'selesai'])->default('pending');
             $table->text('tanggapan')->nullable();
+            $table->text('balasan_mahasiswa')->nullable();
             $table->date('tanggal_kirim');
             $table->timestamps();
         });

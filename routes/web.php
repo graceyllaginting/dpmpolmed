@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use Filament\Facades\Filament;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvitationController;
+
 
 
 
@@ -32,6 +34,7 @@ Route::get('/aspirasi/{kode}', [AspirationController::class, 'show'])->name('asp
 Route::get('/aspirasi', [AspirationController::class, 'index'])->name('aspirasi.index');
 Route::get('/aspirations/cek', [AspirationController::class, 'cek'])->name('aspirasi.cek');
 Route::get('/aspirasi/download/{kode}', [AspirationController::class, 'download'])->name('aspirasi.download');
+Route::post('/aspirasi/{kode}/balas', [AspirationController::class, 'balas'])->name('aspirasi.balas');
 
 Route::resource('users', UserController::class);
 
@@ -46,6 +49,7 @@ Route::get('/struktur', [StructureController::class, 'index'])->name('struktur.i
 
 Route::get('/struktur/periode', [StructureController::class, 'filterPeriode'])->name('struktur.periode');
 
+Route::get('/komisi', [KomisiController::class, 'index'])->name('komisi.index');
 
 Route::get('/debug-invitation-route', function () {
     return route('filament.admin.resources.invitations.index');

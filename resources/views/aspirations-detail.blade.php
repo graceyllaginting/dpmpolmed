@@ -16,17 +16,10 @@
             <p>
                 <span class="font-semibold text-gray-600">📍 Status:</span>
                 @switch($aspirasi->status)
-                    @case('pending')
-                        <span class="text-gray-500 font-semibold">Belum Ditanggapi</span>
-                        @break
-                    @case('ditanggapi')
-                        <span class="text-yellow-600 font-semibold">Sudah Ditanggapi</span>
-                        @break
-                    @case('selesai')
-                        <span class="text-green-600 font-semibold">Selesai</span>
-                        @break
-                    @default
-                        <span class="text-red-600 font-semibold">Tidak Diketahui</span>
+                    @case('pending') <span class="text-gray-500 font-semibold">Belum Ditanggapi</span> @break
+                    @case('ditanggapi') <span class="text-yellow-600 font-semibold">Sudah Ditanggapi</span> @break
+                    @case('selesai') <span class="text-green-600 font-semibold">Selesai</span> @break
+                    @default <span class="text-red-600 font-semibold">Tidak Diketahui</span>
                 @endswitch
             </p>
         </div>
@@ -39,24 +32,17 @@
             </div>
         </div>
 
-        {{-- Tanggapan atau Undangan --}}
+        {{-- Tanggapan dari DPM --}}
         <div class="mt-10">
             <h3 class="text-xl font-semibold text-green-700 mb-3">💬 Tanggapan DPM</h3>
-
             @if ($aspirasi->tanggapan)
-                {{-- Tanggapan langsung --}}
                 <div class="bg-green-50 border-l-4 border-green-400 p-5 rounded-lg text-gray-800 shadow-sm">
                     {{ $aspirasi->tanggapan }}
                 </div>
             @elseif ($aspirasi->invitation)
-                {{-- Undangan Pertemuan --}}
                 <div class="bg-blue-50 border-l-4 border-blue-400 p-5 rounded-lg text-gray-800 shadow-sm">
                     <h4 class="text-lg font-bold text-blue-800 mb-2">📨 Undangan dari DPM</h4>
-                    @php
-                        $isi = $aspirasi->invitation->isi_undangan;
-                        $lines = explode("\n", $isi);
-                    @endphp
-
+                    @php $lines = explode("\n", $aspirasi->invitation->isi_undangan); @endphp
                     @foreach ($lines as $line)
                         <p class="mb-1">{{ $line }}</p>
                     @endforeach
@@ -65,6 +51,63 @@
                 <div class="text-gray-500 italic">Belum ada tanggapan dari DPM.</div>
             @endif
         </div>
+
+        {{-- Status Undangan & Konfirmasi --}}
+        @if ($aspirasi->invitation)
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold text-blue-600 mb-2">📅 Konfirmasi Undangan</h3>
+                @if ($aspirasi->invitation->status_konfirmasi === 'pending')
+                    <p class="text-yellow-700">Anda belum mengkonfirmasi undangan.</p>
+                    <a href="{{ route('invitations.show', $aspirasi->kode_aspirasi) }}"
+                       class="inline-block mt-2 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg shadow font-semibold">
+                        Konfirmasi Sekarang
+                    </a>
+                @else
+                    <p class="text-green-700">
+                        Anda telah <strong class="capitalize">{{ $aspirasi->invitation->status_konfirmasi }}</strong> undangan ini.
+                    </p>
+                @endif
+            </div>
+        @endif
+
+        {{-- Balasan Mahasiswa --}}
+        @if (($aspirasi->tanggapan || $aspirasi->invitation) && !$aspirasi->balasan_mahasiswa)
+            <div class="mt-10">
+                <h3 class="text-xl font-semibold text-purple-700 mb-3">✉️ Balasan Mahasiswa</h3>
+                <form action="{{ route('aspirasi.balas', $aspirasi->kode_aspirasi) }}" method="POST">
+                    @csrf
+                    <textarea name="balasan_mahasiswa" rows="4"
+                        class="w-full px-4 py-3 border rounded-lg resize-none focus:ring-purple-500 focus:border-purple-500"
+                        placeholder="Tanggapi jawaban atau undangan dari DPM..." required></textarea>
+                    <div class="text-right mt-3">
+                        <button type="submit"
+                            class="bg-gradient-to-r from-purple-600 to-purple-700 hover:to-purple-800 text-white px-6 py-2 rounded-lg shadow">
+                            Kirim Balasan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @elseif($aspirasi->balasan_mahasiswa)
+            <div class="mt-10">
+                <h3 class="text-xl font-semibold text-purple-700 mb-3">📬 Balasan Anda</h3>
+                <div class="bg-purple-50 border-l-4 border-purple-400 p-5 rounded-lg text-gray-800 shadow-sm whitespace-pre-line">
+                    {{ $aspirasi->balasan_mahasiswa }}
+                </div>
+            </div>
+        @endif
+
+        {{-- Flash Message --}}
+        @if (session('success'))
+            <div class="mb-6 bg-green-50 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow-sm">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-6 bg-red-50 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow-sm">
+                {{ session('error') }}
+            </div>
+        @endif
 
         {{-- Tombol Kembali --}}
         <div class="mt-10 text-center">
@@ -76,10 +119,8 @@
     </div>
 </div>
 
-{{-- Optional AOS Scroll Animation --}}
+{{-- AOS Animation --}}
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init({ once: true });
-</script>
+<script> AOS.init({ once: true }); </script>
 @endsection
