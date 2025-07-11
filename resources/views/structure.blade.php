@@ -1,8 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Tabs Navigasi Interaktif Responsif --}}
+<div 
+    x-data="{ tab: window.location.hash || '#visi-misi' }"
+    x-init="$watch('tab', value => { document.querySelector(value)?.scrollIntoView({ behavior: 'smooth' }) })"
+    class="w-full bg-white shadow-md border-b border-red-100 sticky top-0 z-40 overflow-x-auto"
+>
+    <div class="flex flex-nowrap sm:flex-wrap justify-start sm:justify-center gap-4 sm:gap-6 px-4 md:px-8 py-3 text-xs sm:text-sm md:text-base whitespace-nowrap">
+        <template x-for="(label, target) in {
+            '#visi-misi': 'Visi & Misi',
+            '#komisi': 'Komisi',
+            '#struktur': 'Struktur',
+            '#sejarah': 'Sejarah'
+        }" :key="target">
+            <a
+                :href="target"
+                @click.prevent="tab = target"
+                class="px-3 sm:px-4 py-1 font-semibold transition-all duration-200 relative"
+                :class="tab === target ? 'text-red-800' : 'text-red-600 hover:text-red-800'"
+            >
+                <span x-text="label"></span>
+                <span 
+                    class="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-red-800 rounded-full transition-all duration-300"
+                    :class="tab === target ? 'w-8 opacity-100' : 'w-0 opacity-0'">
+                </span>
+            </a>
+        </template>
+    </div>
+</div>
 
-<section class="py-20 px-4 md:px-8 lg:px-24 bg-amber-50" id="visi-misi">
+
+<section class="scroll-mt-24 py-20 px-4 md:px-8 lg:px-24 bg-amber-50" id="visi-misi">
     <div class="grid md:grid-cols-2 gap-16 items-start">
         {{-- VISI --}}
         <div id="visi" data-aos="fade-right" class="text-center md:text-left">
@@ -46,8 +75,8 @@
 </section>
 
 
-<section class="w-full px-6 md:px-12 py-20 bg-gradient-to-b from-white to-red-50 text-gray-800">
-    <div id="komisi" data-aos="fade-up" class="text-gray-800 text-center mb-12">
+<section id="komisi" class="scroll-mt-24 w-full px-6 md:px-12 py-20 bg-gradient-to-b from-white to-red-50 text-gray-800">
+    <div  data-aos="fade-up" class="text-gray-800 text-center mb-12">
         <h2 class="text-4xl font-extrabold text-red-800 inline-block relative">
             Komisi-Komisi DPM
             <span class="block h-1 bg-gradient-to-r from-orange-400 to-orange-600 mt-2 rounded-full"></span>
@@ -84,9 +113,9 @@
     </div>
 </section>
 
-<section class="w-full px-6 md:px-12 py-20 bg-amber-50">
+<section id="struktur" class=" scroll-mt-24 w-full px-6 md:px-12 py-20 bg-amber-50">
     {{-- STRUKTUR ORGANISASI --}}
-    <div id="struktur" data-aos="fade-up" class="text-gray-800 text-center mb-12">
+    <div data-aos="fade-up" class="text-gray-800 text-center mb-12">
     <h2 class="text-4xl font-extrabold text-red-800 inline-block relative">
             Struktur Organisasi
             <span class="block h-1 bg-gradient-to-r from-orange-400 to-orange-600 mt-2 rounded-full"></span>
@@ -147,7 +176,7 @@
 </section>
 
 
-<section class="w-full px-6 md:px-12 py-20 bg-gradient-to-b from-white to-red-50 text-gray-800" x-data="{ showModal: false }">
+<section id = "sejarah" class="scroll-mt-24 w-full px-6 md:px-12 py-20 bg-gradient-to-b from-white to-red-50 text-gray-800" x-data="{ showModal: false }">
     <div id="komisi" data-aos="fade-up" class="text-gray-800 text-center mb-12">
         <h2 class="text-4xl font-extrabold text-red-800 inline-block relative">
             Sejarah DPM POLMED
@@ -160,42 +189,75 @@
             Dewan Perwakilan Mahasiswa (DPM) Politeknik Negeri Medan adalah organisasi legislatif mahasiswa yang berdiri untuk menjalankan fungsi legislasi, pengawasan, dan aspirasi di lingkungan kampus.
             <br>
             <button @click="showModal = true"
-                    class="mt-3 inline-block text-sm text-orange-600 font-semibold hover:underline focus:outline-none">
-                Lihat Sejarah Lengkap →
-            </button>
+                class="mt-6 px-6 py-2 rounded-full bg-red-700 hover:bg-red-800 text-white font-semibold transition duration-300 shadow">
+            📖 Lihat Sejarah lengkap
+        
+        </button>
         </p>
     </div>
 
-    {{-- Modal Pop-up --}}
-    <div x-show="showModal"
-         class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
-         x-cloak x-transition>
-        <div class="bg-white w-full max-w-3xl mx-4 md:mx-0 p-6 rounded-lg shadow-xl relative">
-            <button @click="showModal = false"
-                    class="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-2xl font-bold">
-                &times;
-            </button>
-            <h3 class="text-2xl font-bold text-red-700 mb-4">Sejarah DPM POLMED</h3>
-            <div class="max-h-[400px] overflow-y-auto text-gray-700 leading-relaxed pr-1">
-                <p>
-                    Dewan Perwakilan Mahasiswa Politeknik Negeri Medan (DPM POLMED) didirikan sebagai lembaga legislatif mahasiswa yang bertanggung jawab dalam fungsi pengawasan, legislasi, dan penyampaian aspirasi mahasiswa.
-                </p>
-                <p class="mt-3">
-                    Sejak awal pendiriannya, DPM telah menjadi mitra strategis dalam menyeimbangkan kekuatan eksekutif (BEM), serta menjaga nilai demokrasi kampus melalui musyawarah, pengambilan kebijakan bersama, dan kontrol terhadap kegiatan kelembagaan.
-                </p>
-                <p class="mt-3">
-                    Perjalanan sejarah DPM mencatat berbagai peran penting seperti penyusunan konstitusi KEMA, advokasi terhadap hak-hak mahasiswa, pengawasan terhadap UKM/HMPS, serta memperluas relasi antar-lembaga legislatif kampus lain melalui forum-forum nasional.
-                </p>
-                <p class="mt-3">
-                    Hingga saat ini, DPM POLMED terus berupaya menjadi lembaga yang profesional, transparan, dan berpihak kepada kepentingan seluruh mahasiswa Politeknik Negeri Medan.
-                </p>
-            </div>
-        </div>
+{{-- Modal Sejarah DPM POLMED --}}
+<div x-show="showModal"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+     x-transition
+     x-cloak>
+  <div class="bg-white w-full max-w-4xl p-6 rounded-xl shadow-lg overflow-y-auto max-h-[90vh] relative">
+    <button @click="showModal = false" 
+            class="absolute top-3 right-4 text-gray-400 hover:text-red-700 text-2xl font-bold transition">
+        &times;
+    </button>
+
+    <h2 class="text-2xl md:text-3xl font-bold text-red-700 mb-6 text-center">
+        📜 Sejarah DPM POLMED
+    </h2>
+
+    <div class="space-y-6 text-gray-700 leading-relaxed text-sm md:text-base">
+      <p>
+        Pada Tahun 2003, 9 (Sembilan) Program Studi yaitu Teknik Mesin, Teknik Energi, Teknik Elektro, Teknik Elektronika Industri, Teknik Telekomunikasi, Teknik Sipil, Administrasi Bisnis, Akuntansi dan Perbankan dan Keuangan yang diwakili oleh masing-masing 5 (lima) orang menyelenggarakan Musyawarah yang menghasilkan keputusan untuk dibentuknya suatu Dewan Perwakilan Mahasiswa.
+      </p>
+      <p>
+        Sebagai Ketua pertama DPM POLMED adalah <strong>Kristian Adventus Tampubolon</strong> (Teknik Elektronika Industri, Angkatan 2001). Setelah itu, melalui Tim Formatur bentukan Dewan Perwakilan Mahasiswa, <strong>Sutrisno</strong> (Akuntansi, 2001) sebagai Ketua Senat Mahasiswa 2003–2004.
+      </p>
+
+      <ul class="space-y-3 border-l-2 border-red-700 pl-4 mt-4">
+        <li>
+          <span class="font-semibold text-red-700">2004</span>: Berdasarkan hasil Sidang Umum DPM POLMED Tahun 2004 yang diselenggarakan oleh Tim Formatur Pemilihan DPM, terpilihlah sebagai Ketua DPM – <strong>Rasyid Ridho Lubis</strong> (Teknik Sipil, 2002). Setelah itu, melalui Tim Formatur bentukan DPM terpilihlah Ketua Senat – <strong>Catur Arya Prahasta</strong> (Teknik Sipil, 2002) dengan masa bakti 2004-2005.
+
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2005</span>: Berdasarkan hasil Sidang Umum DPM POLMED Tahun 2005 yang diselenggarakan oleh Tim Formatur Pemilihan DPM pada tanggal 16 Jull 2005 terpilihlah Ketua DPM – <strong>Nova Heri Soni</strong> (Teknik Energi, 2003). Setelah itu, melalui Tim Formatur bentukan DPM terpilihlah Ketua Senat – <strong>Agus Pelani</strong> (Teknik Mesin, 2003)  dengan masa bakti 2005-2006.
+
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2006</span>: Berdasarkan hasil Sidang Umum DPM POLMED Tahun 2006 yang diselenggarakan oleh Tim Formatur Pemilihan DPM terpilihlah Ketua DPM – <strong>Jimmy Kardo Sitepu</strong> (Teknik Elektro, 2004)
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2008</span>: Berdasarkan hasil Sidang Umum DPM POLMED Tahun 2008 yang diselenggarakan oleh Tim Formatur Pemilihan DPM terpilihlah Ketua DPM – <strong>M. Khairuddin</strong> (MICE, 2005). Setelah itu, melalui Tim Formatur bentukan DPM terpilihlah Ketua Senat – <strong>Ariansyah Ikhwan Nasution</strong> dengan masa bakti 2007 2008.
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2009</span>: Berdasarkan hasil Sidang Umum DPM Tahun 2009 yang diselenggarakan oleh Tim Formatur Pemilihan DPM terpilihlah Ketua DPM – <strong>Dedy Hakim</strong> (Teknik Mesin, 2006). Setelah itu, melalui Tim Formatur bentukan DPM terpilihlah Ketua Senat – <strong>M. Iqbal Lubis</strong> (Perbankan dan Keuangan, 2006) dengan masa bakti 2009-2010.
+
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2011</span>: Berdasarkan hasil Sidang Umum DPM Tahun 2011 yang diselenggarakan oleh Tim Formatur Pemilihan DPM, terpilihlah  Ketua DPM – <strong>Rahmad Nurdiansyah</strong> (Perbankan dan Keuangan, 2009). Setelah itu, melalui Tim Formatur bentukan DPM terpilihlah Ketua Senat – <strong>Firmansyah</strong> (Akuntansi, 2009) dengan masa bakti 2011-2012.
+
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2012</span>: Berdasarkan hasil Sidang Umum DPM Tahun 2012 yang diselenggarakan oleh Tim Formatur Open Recruitment DPM, terpilihlah Ketua DPM – <strong>Yanuardi Sanjaya</strong> (Perbankan dan Keuangan, 2011). Setelah itu melalui Sidang istimewa KEMA POLMED, terpilihlah Ketua BEM – <strong>Ahmad Habibi Indraja Lubis</strong> Periode 2013-2014.
+
+        </li>
+        <li>
+          <span class="font-semibold text-red-700">2014</span>: Berdasarkan hasil Sidang Paripurna I DPM Tahun 2014 yang diselenggarakan oleh Tim Formatur Open Recruitment DPM, terpilihlah Ketua DPM – <strong>Wahyu Nugroho</strong> (Teknik Mesin, 2012). Setelah itu melalui Sidang Istimewa KEMA POLMED, terpilihlah Ketua BEM – <strong>M. Zuhri Maulana Nasution</strong> Periode 2014-2015.
+        </li>
+      </ul>
+
+      <p class="mt-4">
+        DPM POLMED terus berkembang menjadi lembaga legislatif mahasiswa yang mengawal demokrasi kampus, menyuarakan kepentingan mahasiswa, dan menjalin kerja sama antar-lembaga di tingkat regional maupun nasional.
+      </p>
     </div>
+  </div>
+</div>
 </section>
-
-
-
 
 
 
@@ -205,4 +267,11 @@
 <script>
     AOS.init({ once: true });
 </script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
 @endsection

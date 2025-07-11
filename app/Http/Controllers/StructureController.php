@@ -32,7 +32,7 @@ class StructureController extends Controller
             ],
             [
                 'nama' => 'Komisi II',
-                'deskripsi' => "1. Menindaklanjuti usul amandemen Undang-Undang Dasar KEMA POLMED\n 2. Merumuskan draft rancangan peraturan perundang-undangan KEMA POLMED\n3. Mensosialisasikan segala hal yang berhubungan dengan perundang-undangan KEMA POLMED\n4. Membantu UKM dan HMPS dalam membuat AD/ART atau peraturan lainnya\n5.Memeriksa anggaran asar dan anggaran rumah tangga UKM dan HMPS\n6. Membuat program legislasi selama 1 (satu) tahun pengurusan\n7.Menindaklanjuti usul pembuatan peraturan perundang-undangan",
+                'deskripsi' => "1. Menindaklanjuti usul amandemen Undang-Undang Dasar KEMA POLMED\n2. Merumuskan draft rancangan peraturan perundang-undangan KEMA POLMED\n3. Mensosialisasikan segala hal yang berhubungan dengan perundang-undangan KEMA POLMED\n4. Membantu UKM dan HMPS dalam membuat AD/ART atau peraturan lainnya\n5.Memeriksa anggaran asar dan anggaran rumah tangga UKM dan HMPS\n6. Membuat program legislasi selama 1 (satu) tahun pengurusan\n7.Menindaklanjuti usul pembuatan peraturan perundang-undangan",
                 'ringkas' => 'Perundang-Undangan'
             ],
             [

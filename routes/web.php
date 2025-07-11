@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use Filament\Facades\Filament;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\AgendaController;
 
 
 
@@ -54,6 +55,8 @@ Route::get('/komisi', [KomisiController::class, 'index'])->name('komisi.index');
 Route::get('/debug-invitation-route', function () {
     return route('filament.admin.resources.invitations.index');
 });
+
+Route::get('/agenda/events', [AgendaController::class, 'index'])->name('agenda.events');
 
 
 

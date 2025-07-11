@@ -7,10 +7,14 @@
     use Illuminate\Support\Str;
 @endphp
 
-<div class="container mx-auto py-12 px-4">
+<section class="container mx-auto py-12 px-4 bg-gradient-to-b from-white to-red-50 text-gray-800">
+
+{{-- <div class="container mx-auto py-12 px-4"> --}}
     {{-- Judul --}}
     <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-4xl font-bold text-blue-800 mb-2" data-aos="fade-down">{{ $doc->judul }}</h1>
+        <h2 class="text-3xl md:text-4xl font-bold text-red-800 mb-2 inline-block relative" data-aos="fade-down">{{ $doc->judul }}
+        <span class="block h-1 bg-gradient-to-r from-orange-400 to-orange-600 mt-2 rounded-full"></span>
+        </h2>
         <p class="text-gray-500 text-sm">
             Kategori: <span class="font-medium">{{ $doc->kategori->nama_kategori }}</span> |
             Tanggal: {{ \Carbon\Carbon::parse($doc->tanggal)->translatedFormat('d F Y') }}
@@ -61,19 +65,21 @@
             </div>
 
             <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-1">📝 Deskripsi Kegiatan</h3>
+                <h3 class="text-xl font-semibold text-gray-800 mb-1">📝 Deskripsi </h3>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $doc->deskripsi }}</p>
             </div>
 
             <div class="pt-4">
                 <a href="{{ route('documentation.index') }}"
-                    class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition-all">
+                    class="inline-block bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white px-6 py-2 rounded-full shadow transition-all">
                     ← Kembali ke Dokumentasi
                 </a>
             </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
+</section>
+
 
 {{-- AOS animation --}}
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />

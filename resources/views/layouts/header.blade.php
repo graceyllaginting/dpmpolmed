@@ -39,12 +39,16 @@
         </div>
 
         {{-- Hamburger Mobile --}}
-        <button id="menu-toggle" class="md:hidden focus:outline-none">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-        </button>
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <svg id="hamburger-icon" class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="close-icon" class="w-6 h-6 text-white hidden" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
     </div>
 
     {{-- Mobile Menu --}}
@@ -57,12 +61,17 @@
             <li><a href="{{route('aspirasi.index') }}" class="bg-red-800 text-white px-4 py-2 rounded-md w-fit mt-2 hover:bg-orange-650">Kirim Aspirasimu</a></li>
         </ul>
     </div>
+    
 </nav>
 
 {{-- Toggle Script --}}
 <script>
-    document.getElementById('mobile-menu-button').addEventListener('click', function () {
-        const menu = document.getElementById('mobile-menu');
-        menu.classList.toggle('hidden');
+    const toggleButton = document.getElementById('menu-toggle');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    toggleButton.addEventListener('click', () => {
+        hamburgerIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
     });
 </script>

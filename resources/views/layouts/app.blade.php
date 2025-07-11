@@ -6,8 +6,11 @@
     <title>@yield('title', 'DPM POLMED')</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo_dpm.png') }}">
 
+   
+
     {{-- Vite Assets --}}
     @vite([ 'resources/js/app.js', 'resources/css/app.css'])
+    @stack('styles')
 
     {{-- Font --}}
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -24,7 +27,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body x-data="{ showModal: false }" class="bg-gray-50 text-gray-800 font-sans">
     
     {{-- Header --}}
     @include('layouts.header')
@@ -32,6 +35,8 @@
     {{-- Halaman Konten --}}
     <main>
         @yield('content')
+
+
         
     </main>
 
@@ -43,6 +48,7 @@
 
 
     <script src="//unpkg.com/alpinejs" defer></script>
+
 
     <!-- Tambahkan di layout utama -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -60,6 +66,6 @@
         backface-visibility: hidden;
     }
 </style>
-
+        @stack('scripts')
 </body>
 </html>

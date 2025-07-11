@@ -26,11 +26,10 @@
             {{-- Sosial Media --}}
             <div class="flex justify-center md:justify-end items-center gap-4 mt-5">
                 @foreach ([
-                    ['url' => 'https://instagram.com/dpm.polmed', 'icon' => 'fab fa-instagram', 'label' => 'Instagram'],
-                    ['url' => 'https://youtube.com/@dpmpolmed', 'icon' => 'fab fa-youtube', 'label' => 'YouTube'],
-                    ['url' => 'https://tiktok.com/@dpm.polmed', 'icon' => 'fab fa-tiktok', 'label' => 'TikTok'],
-                    ['url' => 'https://facebook.com/dpm.polmed', 'icon' => 'fab fa-facebook-f', 'label' => 'Facebook'],
-                    ['url' => 'https://x.com/dpm.polmed', 'icon' => 'fab fa-x-twitter', 'label' => 'X']
+                    ['url' => 'https://www.instagram.com/dpmpolmed?igsh=MXZ2aG5lbGpzdTNlMA== ', 'icon' => 'fab fa-instagram', 'label' => 'Instagram'],
+                    ['url' => 'https://www.youtube.com/@dpmpolmed501', 'icon' => 'fab fa-youtube', 'label' => 'YouTube'],
+                    ['url' => 'https://www.facebook.com/dewanperwakilanmahasiswapolitekniknegerimedan', 'icon' => 'fab fa-facebook-f', 'label' => 'Facebook'],
+                    ['url' => 'https://x.com/dpmpolmed?t=d0BBCxZ5fOyv0T7G2S9ivA&s=08 ', 'icon' => 'fab fa-x-twitter', 'label' => 'X']
                 ] as $soc)
                     <a href="{{ $soc['url'] }}" target="_blank" title="{{ $soc['label'] }}"
                        class="group bg-white text-red-900 hover:bg-orange-500 hover:text-white p-3 rounded-full transition duration-300">

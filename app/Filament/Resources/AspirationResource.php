@@ -72,7 +72,7 @@ class AspirationResource extends Resource
                     ->label('Balasan Mahasiswa')
                     ->rows(5)
                     ->disabled()
-                    ->visible(fn ($record) => filled($record->balasan_mahasiswa))
+                    ->visible(fn ($record) => $record && filled($record->balasan_mahasiswa))
                     ->columnSpanFull(),
 
                 DatePicker::make('tanggal_kirim')
@@ -123,6 +123,7 @@ class AspirationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
 
             ])
             ->bulkActions([
@@ -138,7 +139,6 @@ class AspirationResource extends Resource
             'index' => Pages\ListAspirations::route('/'),
             'create' => Pages\CreateAspiration::route('/create'),
             'edit' => Pages\EditAspiration::route('/{record}/edit'),
-            'view' => Pages\ViewAspiration::route('/{record}'),
 
         ];
     }
