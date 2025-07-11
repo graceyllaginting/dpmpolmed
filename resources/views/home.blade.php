@@ -25,9 +25,9 @@
   <div class="max-w-5xl mx-auto px-4" data-aos="fade-up">
     <h3 class="text-3xl font-bold text-center mb-8 text-red-700">Tentang Kami</h3>
     <p class="text-center text-gray-700 text-lg leading-relaxed">
-      Dewan Perwakilan Mahasiswa (DPM) adalah lembaga legislatif kampus yang mengemban amanah untuk menjadi suara dan pengawas mahasiswa. Kami hadir untuk memastikan bahwa setiap aspirasi mahasiswa didengar, diperjuangkan, dan dijalankan dengan prinsip transparansi dan tanggung jawab.
+      Dewan Perwakilan Mahasiswa (DPM) adalah lembaga tinggi dalam Keluarga Mahasiswa Politeknik Negeri Medan yang memiliki kekuasaan legislatif. Dewan Perwakilan Mahasiswa memiliki fungsi legislasi, fungsi pengawasan, fungsi advokasi, fungsi anggaran dan fungsi perwakilan. DPM menampung, mempertimbangkan serta menindaklanjuti segala aspirasi Mahasiswa yang disampaikan kepada Dewan Perwakilan Mahasiswa
     </p>
-  </div>
+    </div>
 </section>
 
 {{-- Kegiatan Terbaru --}}
@@ -75,8 +75,6 @@
         <p id="modalDescription" class="text-gray-700 text-sm leading-relaxed"></p>
       </div>
     </div> --}}
-
-
 
 {{-- CTA Section --}}
 <section class="px-4 md:px-8 lg:px-24 bg-amber-50 text-black py-16 text-center" data-aos="fade-up">

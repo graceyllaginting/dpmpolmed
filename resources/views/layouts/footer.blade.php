@@ -19,8 +19,9 @@
         {{-- Kanan: Kontak & Sosmed --}}
         <div class="text-center md:text-right flex flex-col justify-between">
             <div class="space-y-2 text-sm text-gray-300">
-                <p>Email: <a href="mailto:dpm@polmed.ac.id" class="underline hover:text-orange-500 transition">dpm@polmed.ac.id</a></p>
-                <p>Alamat: Sekretariat Gedung U, Jln. Almamater No.1 Kampus USU Medan</p>
+                <p>Email: <a href="mailto:dpmpolmed212@gmail.com" class="underline hover:text-orange-500 transition">dpmpolmed212@gmail.com</a></p>
+                <p>Sekretariat: Gedung U Lantai 1 Politeknik Negeri Medan
+                    <br>Jl. Almamater No. 1 Kampus USU, Medan, Sumatera Utara 20155 </p>
             </div>
 
             {{-- Sosial Media --}}

@@ -18,8 +18,6 @@ class HomeController extends Controller
         return view('home', compact('latestDocs'));
     }
 
-
-
  
 
 public function agenda()

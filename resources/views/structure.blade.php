@@ -186,7 +186,7 @@
 
     <div class="text-gray-700 text-center max-w-3xl mx-auto leading-relaxed">
         <p>
-            Dewan Perwakilan Mahasiswa (DPM) Politeknik Negeri Medan adalah organisasi legislatif mahasiswa yang berdiri untuk menjalankan fungsi legislasi, pengawasan, dan aspirasi di lingkungan kampus.
+            Dewan Perwakilan Mahasiswa (DPM) Politeknik Negeri Medan adalah organisasi legislatif mahasiswa yang berdiri untuk menjalankan fungsi legislasi, pengawasan,advokasi, anggaran dan fungsi perwakilan di lingkungan kampus.
             <br>
             <button @click="showModal = true"
                 class="mt-6 px-6 py-2 rounded-full bg-red-700 hover:bg-red-800 text-white font-semibold transition duration-300 shadow">

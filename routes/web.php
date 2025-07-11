@@ -12,18 +12,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\AgendaController;
 
-
-
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-
-Route::get('/about', function () {
-    return view('about');
-});
-
 Route::get('/structure', [StructureController::class, 'index'])->name('struktur');
-
 
 Route::get('/dokumentasi', [DocumentationController::class, 'index'])->name('documentation.index');
 Route::get('/dokumentasi/kategori/{id}', [DocumentationController::class, 'filterByKategori'])->name('dokumentasi.kategori');
@@ -43,11 +34,8 @@ Route::post('/invitations/store', [InvitationController::class, 'store'])->name(
 Route::get('/invitations/{kode}', [InvitationController::class, 'showByKode'])->name('invitations.show');
 Route::post('/invitations/{id}/konfirmasi', [InvitationController::class, 'konfirmasi'])->name('invitations.konfirmasi');
 
-// Route::get('/struktur', [StructureController::class, 'index'])->name('struktur');
 Route::get('/struktur/bagian/{bagian}', [StructureController::class, 'showByBagian'])->name('struktur.bagian');
-
 Route::get('/struktur', [StructureController::class, 'index'])->name('struktur.index');
-
 Route::get('/struktur/periode', [StructureController::class, 'filterPeriode'])->name('struktur.periode');
 
 Route::get('/komisi', [KomisiController::class, 'index'])->name('komisi.index');

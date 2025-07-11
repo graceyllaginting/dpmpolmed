@@ -38,7 +38,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#9400d3',
                 'secondary' => '#FFD700',
             ])
-            
             ->brandName('DPM POLMED')
             ->brandLogo(fn () => view('components.logo'))
             ->discoverResources(app_path('Filament/Resources'), 'App\\Filament\\Resources')
