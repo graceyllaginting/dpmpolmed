@@ -16,6 +16,9 @@ class AgendaController extends Controller
             'extendedProps' => [
                 'deskripsi' => $agenda->deskripsi,
                 'tanggal' => $agenda->tanggal,
+                'waktu' => $agenda->waktu,
+                'tempat' => $agenda->tempat,
+
             ],
         ];
         });

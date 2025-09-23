@@ -40,10 +40,16 @@
                     <input type="text" name="prodi" placeholder="Contoh: D3 Manajemen Informatika" class="w-full px-4 py-3 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
 
-                <div>
+               <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700 text-left">Email</label>
-                    <input type="email" name="email" placeholder="Email Aktif" class="w-full px-4 py-3 border rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                    <input type="email" name="email" placeholder="Gunakan email kampus"
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-red-500 focus:border-red-500"
+                        required>
+                    @error('email')
+                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
             </div>
 
             <div>
@@ -192,8 +198,88 @@
 
     </div>
 
-
 </section>
+
+{{-- Rekaman Aspirasi Masuk --}}
+<section class="py-20 px-4 md:px-8 lg:px-24 bg-white">
+    <div class="container mx-auto max-w-6xl">
+        <h2 class="text-3xl font-extrabold text-red-700 text-center mb-8 relative">
+            📝 Rekaman Aspirasi Masuk
+            <span class="block w-1/2 mx-auto h-1 bg-orange-400 mt-2 rounded-full"></span>
+        </h2>
+
+        <div class="overflow-x-auto bg-white shadow-xl rounded-2xl border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-red-100 text-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-semibold">Nama</th>
+                        <th class="px-6 py-3 text-left font-semibold">NIM</th>
+                        <th class="px-6 py-3 text-left font-semibold">Prodi</th>
+                        <th class="px-6 py-3 text-left font-semibold">Isi Aspirasi</th>
+                        <th class="px-6 py-3 text-left font-semibold">Status</th>
+                    </tr>
+                </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($aspirasis as $aspirasi)
+                            <tr x-data="{ openModal: false }">
+                                {{-- Nama disamarkan --}}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ Str::substr($aspirasi->nama_pengirim, 0, 1) . str_repeat('*', strlen($aspirasi->nama_pengirim) - 1) }}
+                                </td>
+
+                                {{-- NIM disamarkan --}}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ substr($aspirasi->nim, 0, 2) . str_repeat('*', strlen($aspirasi->nim) - 4) . substr($aspirasi->nim, -2) }}
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $aspirasi->prodi }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ Str::limit($aspirasi->isi_aspirasi, 50) }}</td>
+
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if($aspirasi->tanggapan)
+                                        <button
+                                            class="text-sm text-blue-700 underline hover:text-blue-900"
+                                            @click="openModal = true"
+                                        >
+                                            Lihat Tanggapan
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div x-show="openModal"
+                                          x-cloak
+                                            style="background-color: rgba(0,0,0,0.5);"
+                                            class="fixed inset-0 z-50 flex items-center justify-center"
+                                            x-transition>
+                                            <div class="bg-white w-11/12 max-w-lg rounded-xl shadow-lg p-6 relative">
+                                                <h3 class="text-xl font-bold text-red-700 mb-3">💬 Tanggapan Admin</h3>
+                                                <p class="text-gray-700 whitespace-pre-line">
+                                                    {!! nl2br(e($aspirasi->tanggapan)) !!}
+                                                </p>
+                                                <button class="absolute top-2 right-3 text-gray-500 hover:text-red-600"
+                                                        @click="openModal = false">
+                                                    ✖
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Belum Ditanggapi</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-gray-500">Belum ada aspirasi yang masuk.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+            </table>
+            <div class="mt-6">
+                {{ $aspirasis->links() }}
+            </div>
+        </div>
+    </div>
+</section>
+
 
 
 {{-- AOS (Animasi saat scroll) --}}

@@ -45,7 +45,3 @@ Route::get('/debug-invitation-route', function () {
 });
 
 Route::get('/agenda/events', [AgendaController::class, 'index'])->name('agenda.events');
-
-
-
-

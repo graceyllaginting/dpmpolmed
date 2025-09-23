@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visitors', function (Blueprint $table) {
-             $table->id('id_pengunjung');
-            $table->string('ip_address')->nullable();
-            $table->string('user_agent')->nullable();
-            $table->string('path')->nullable();
-            $table->timestamp('visited_at')->nullable();
+        Schema::table('aspirations', function (Blueprint $table) {
+        $table->string('ktm')->nullable()->after('isi_aspirasi');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visitors');
+        Schema::table('aspirations', function (Blueprint $table) {
+        $table->dropColumn('ktm');
+        });
     }
 };

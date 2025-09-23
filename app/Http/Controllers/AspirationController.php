@@ -21,6 +21,9 @@ class AspirationController extends Controller
             ->take(5)
             ->get();
 
+        $aspirasis = Aspiration::latest('tanggal_kirim')->paginate(10);
+
+
         // Statistik
         $totalAspirasi = Aspiration::count();
         $totalDitanggapi = Aspiration::whereNotNull('tanggapan')->count();
@@ -28,6 +31,7 @@ class AspirationController extends Controller
 
         return view('aspirations', compact(
             'aspirasiPublik',
+            'aspirasis',
             'totalAspirasi',
             'totalDitanggapi',
             'totalBelumDitanggapi'
@@ -37,13 +41,22 @@ class AspirationController extends Controller
     // 🧾 Simpan aspirasi dari form
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_pengirim' => 'required|string|max:255',
-            'nim' => 'required|string|max:20',
-            'prodi' => 'required|string|max:100',
-            'email' => 'required|email|max:255',
-            'isi_aspirasi' => 'required|string',
-        ]);
+    $validated = $request->validate([
+        'nama_pengirim' => 'required|string|max:255',
+        'nim' => 'required|string|max:20',
+        'prodi' => 'required|string|max:100',
+        'email' => [
+            'required',
+            'email',
+            'regex:/^[a-zA-Z0-9._%+-]+@students\.polmed\.ac\.id$/'
+        ],
+        'isi_aspirasi' => 'required|string',
+    ], [
+        'email.regex' => 'Email harus menggunakan @students.polmed.ac.id',
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Format email tidak valid',
+    ]);
+
 
         $kode = 'DPM-' . strtoupper(Str::random(6));
 

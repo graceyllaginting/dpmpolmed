@@ -26,7 +26,9 @@ class InvitationResource extends Resource
                 ->label('Kode Aspirasi')
                 ->relationship('aspiration', 'kode_aspirasi')
                 ->searchable()
-                ->required(),
+                ->required()
+                ->disabled(fn () => request()->has('aspiration_id')), // jika ada di URL, disable
+
 
             Forms\Components\DatePicker::make('tanggal')
                 ->label('Tanggal Pertemuan')
@@ -143,4 +145,6 @@ class InvitationResource extends Resource
             'edit' => Pages\EditInvitation::route('/{record}/edit'),
         ];
     }
+
+    
 }

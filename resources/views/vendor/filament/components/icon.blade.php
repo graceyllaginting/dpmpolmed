@@ -12,7 +12,7 @@
     <span {{ $attributes->class($class) }}>
         {{ $icon }}
     </span>
-@elseif (str_contains($icon, '/'))
+@elseif (str_contains($icon, '/')) 
     <img
         {{
             $attributes

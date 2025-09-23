@@ -1,5 +1,6 @@
     {{-- Navbar --}}   
- <nav class="bg-red-800 border-b shadow-sm sticky top-0 z-50">
+ <nav class="bg-red-900
+ border-b shadow-sm sticky top-0 z-50">
  <div class="w-full flex justify-between items-center px-2 md:px-4 py-4">        {{-- Logo dan Nama --}}
         <div class="flex items-center space-x-3">
             <img src="{{ asset('img/logo_dpm.png') }}" alt="Logo DPM" class="h-20 w-20 object-contain">

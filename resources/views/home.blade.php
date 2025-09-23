@@ -114,6 +114,8 @@
               <p class="mb-2 text-sm text-gray-500">📅 ${new Date(info.event.start).toLocaleDateString('id-ID', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
               })}</p>
+              <p class="text-sm text-gray-700">🕒 ${info.event.extendedProps.waktu ?? 'Waktu belum ditentukan'}</p>
+              <p class="text-sm text-gray-700">📍 ${info.event.extendedProps.tempat ?? 'Tempat belum ditentukan'}</p>
               <p class="text-sm text-gray-700">${info.event.extendedProps.deskripsi ?? 'Tidak ada deskripsi.'}</p>
             </div>
           `,

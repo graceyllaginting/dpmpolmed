@@ -17,19 +17,25 @@ class StatsOverview extends BaseWidget
                 ->description('Jumlah semua aspirasi yang masuk')
                 ->descriptionColor('danger')
                 ->icon('heroicon-o-chat-bubble-left-right')
-                ->color('gray'),
+                ->color('gray')
+                ->url(route('filament.admin.resources.aspirations.index')) // <- arahkan ke halaman resource
+                ->extraAttributes(['class' => 'cursor-pointer']), // <- agar mouse berubah jadi tangan
 
             Card::make('Total Dokumentasi', Documentation::count())
                 ->description('Jumlah dokumentasi kegiatan')
                 ->descriptionColor('primary')
                 ->icon('heroicon-o-camera')
-                ->color('gray'),
+                ->color('gray')
+                ->url(route('filament.admin.resources.documentations.index'))
+                ->extraAttributes(['class' => 'cursor-pointer']),
 
             Card::make('Total Kategori', Category::count())
                 ->description('Kategori aspirasi atau dokumentasi')
                 ->descriptionColor('success')
                 ->icon('heroicon-o-tag')
-                ->color('gray'),
+                ->color('gray')
+                ->url(route('filament.admin.resources.categories.index'))
+                ->extraAttributes(['class' => 'cursor-pointer']),
         ];
         
     }

@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\StatsOverview;
-use App\Filament\Widgets\VisitorStats;
 use App\Filament\Widgets\LatestAspirations;
 
 use Filament\Panel;
@@ -40,6 +39,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->brandName('DPM POLMED')
             ->brandLogo(fn () => view('components.logo'))
+            ->favicon(asset('img/logo_dpm.png'))
+
             ->discoverResources(app_path('Filament/Resources'), 'App\\Filament\\Resources')
             ->discoverPages(app_path('Filament/Pages'), 'App\\Filament\\Pages')
             ->pages([
@@ -48,7 +49,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(app_path('Filament/Widgets'), 'App\\Filament\\Widgets')
             ->widgets([
                 StatsOverview::class,
-                VisitorStats::class,
                 LatestAspirations::class,
                 AccountWidget::class,
                 FilamentInfoWidget::class,
